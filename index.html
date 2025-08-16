@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNF手游增幅模拟器</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📱 DNF手游增幅模拟器</h1>
+            <div class="header-controls">
+                <button id="settingsBtn" class="icon-btn">⚙️</button>
+                <button id="infoBtn" class="icon-btn">ℹ️</button>
+            </div>
+        </header>
+        
+        <main>
+            <!-- 紧密的状态和操作区 -->
+            <section class="main-panel">
+                <!-- 当前状态 -->
+                <div class="status-row">
+                    <div class="level-card">
+                        <div class="level-label">当前等级</div>
+                        <div class="level-display">+<span id="currentLevel">0</span></div>
+                    </div>
+                    <div class="equipment-selector">
+                        <select id="equipmentType">
+                            <option value="weapon">⚔️ 武器</option>
+                            <option value="nonWeapon">🛡️ 非武器</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 操作按钮 -->
+                <div class="action-row">
+                    <button id="amplifyBtn" class="main-btn amplify-btn">
+                        <span class="btn-icon">🎯</span>
+                        <span class="btn-text">增幅</span>
+                    </button>
+                    <div class="auto-controls">
+                        <select id="targetLevel" class="target-select">
+                            <option value="1">+1</option>
+                            <option value="2">+2</option>
+                            <option value="3">+3</option>
+                            <option value="4">+4</option>
+                            <option value="5">+5</option>
+                            <option value="6">+6</option>
+                            <option value="7">+7</option>
+                            <option value="8">+8</option>
+                            <option value="9">+9</option>
+                            <option value="10">+10</option>
+                            <option value="11">+11</option>
+                            <option value="12">+12</option>
+                            <option value="13">+13</option>
+                            <option value="14">+14</option>
+                            <option value="15">+15</option>
+                            <option value="16">+16</option>
+                            <option value="17">+17</option>
+                            <option value="18">+18</option>
+                            <option value="19">+19</option>
+                            <option value="20">+20</option>
+                        </select>
+                        <button id="autoAmplifyBtn" class="main-btn auto-btn">
+                            <span class="btn-icon">🤖</span>
+                            <span class="btn-text">自动</span>
+                        </button>
+                        <button id="stopAmplifyBtn" class="main-btn stop-btn" style="display:none;">
+                            <span class="btn-icon">⏹️</span>
+                            <span class="btn-text">停止</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 快速信息 -->
+                <div class="quick-info">
+                    <div class="info-item">
+                        <span class="info-label">成功率</span>
+                        <span id="successRate" class="info-value">100%</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">矛盾</span>
+                        <span id="requiredMaodun" class="info-value">0</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">幸运符</span>
+                        <span id="requiredLucky" class="info-value">0</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 统计信息 -->
+            <section class="stats-panel">
+                <h3>📊 统计信息</h3>
+                <div class="stats-grid-compact">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalMaodun">0</div>
+                        <div class="stat-label">矛盾</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalLucky">0</div>
+                        <div class="stat-label">幸运符</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalRMB">0</div>
+                        <div class="stat-label">RMB</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="maxLevel">+0</div>
+                        <div class="stat-label">最高</div>
+                    </div>
+                </div>
+                <div class="stats-detail">
+                    <span>泰拉值: <strong id="totalTaila">0</strong></span>
+                    <span>次数: <strong id="totalAttempts">0</strong></span>
+                </div>
+            </section>
+
+            <!-- 日志区 -->
+            <section class="log-panel-compact">
+                <div class="log-header">
+                    <h3>📝 增幅日志</h3>
+                    <button id="clearLogBtn" class="clear-log-btn">清空</button>
+                </div>
+                <div id="logContainer" class="log-container-compact"></div>
+            </section>
+
+            <!-- 快速重置 -->
+            <div class="quick-actions">
+                <button id="resetBtn" class="reset-btn-compact">🔄 重置</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- 设置弹窗 -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>⚙️ 设置</h3>
+                <button id="closeSettings" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-item">
+                    <label for="weeklyMaodun">每周矛盾数：</label>
+                    <input type="number" id="weeklyMaodun" value="150" min="0">
+                </div>
+                <div class="setting-item">
+                    <label for="maodunPrice">矛盾价格（泰拉）：</label>
+                    <input type="number" id="maodunPrice" value="500" min="0">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 详细信息弹窗 -->
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>ℹ️ 详细信息</h3>
+                <button id="closeInfo" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="info-section">
+                    <h4>当前增幅概率</h4>
+                    <div class="probability-grid">
+                        <div class="prob-item">
+                            <span class="prob-label">成功率:</span>
+                            <span id="detailSuccessRate" class="prob-value">100%</span>
+                        </div>
+                        <div class="prob-item">
+                            <span class="prob-label">失败率:</span>
+                            <span id="detailFailRate" class="prob-value">0%</span>
+                        </div>
+                        <div class="prob-item">
+                            <span class="prob-label">破坏率:</span>
+                            <span id="detailDestroyRate" class="prob-value">0%</span>
+                        </div>
+                        <div class="prob-item">
+                            <span class="prob-label">降级数:</span>
+                            <span id="detailDowngrade" class="prob-value">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-section">
+                    <h4>消耗详情</h4>
+                    <div class="cost-details">
+                        <p>所需矛盾: <strong id="detailMaodun">0</strong></p>
+                        <p>所需幸运符: <strong id="detailLucky">0</strong></p>
+                        <p>单次泰拉: <strong id="detailSingleCost">0</strong></p>
+                        <p>单次RMB: <strong id="detailSingleRMB">0</strong>元</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
